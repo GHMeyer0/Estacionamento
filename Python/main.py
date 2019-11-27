@@ -1,15 +1,32 @@
-from vagas import Vaga as vagas
+import threading
+import vagas
 import threading as t
+import time
+import random
 
-class SaiCarro:
-    def carroSair(self):
-        vagas.liberaVaga(vagas.buscaVagaDisponivel())
+estacionamento = vagas.Vaga(10)
+
+#cancelas = {
+#    cancela1: t.Thread(target=thread_function, args=(1,)),
+#        
+#}
+
+class Cancela(t.Thread):
+    def carroEntrar(self):
+        estacionamento.ocupaVaga()
     
-    def liberaThread():
-        try: 
-            x = {}
-            
+    def carroSair(self):
+        estacionamento.liberaVaga()
 
+    def run(self):
+        while True:
+            IO = random.randint(0, 1)
+            if IO == 1:
+                self.carroEntrar()
+            if IO == 0:
+                self.carroSair()
+        return
 
-
-        
+for i in range(10):
+	cancela = Cancela()
+	cancela.start()
