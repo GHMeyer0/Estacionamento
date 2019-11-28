@@ -16,7 +16,6 @@ class Vaga:
         if numero_da_vaga != False:     
             self.vagas[numero_da_vaga - 1]['vaga_disponivel'].acquire()
             print("Vaga", numero_da_vaga, "Preenchida! \n ")
-            time.sleep(2)
         else:
             print("Vagas Esgotadas")
         

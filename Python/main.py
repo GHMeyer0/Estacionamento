@@ -9,7 +9,7 @@ import os
 def clear(): return os.system('cls')  # on Windows System
 
 estacionamento = vagas.Vaga(10)
-fila_pra_entrar = 20
+fila_pra_entrar = 1000
 fila_pra_sair = 0
 
 class Cancela(t.Thread):
@@ -27,9 +27,7 @@ class Cancela(t.Thread):
         global fila_pra_entrar
         global fila_pra_sair
         while fila_pra_entrar > 0:
-            if fila_pra_sair > 5:
-                IO = 0
-            else: IO = 1
+            IO = random.randint(0,1)
             if IO == 1:
                 self.carroEntrar(1)
                 fila_pra_entrar -= 1
