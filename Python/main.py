@@ -8,6 +8,8 @@ import os
 
 def clear(): return os.system('cls')  # on Windows System
 
+
+lock = threading.Semaphore(1)
 estacionamento = vagas.Vaga(10)
 fila_pra_entrar = 1000
 fila_pra_sair = 0
@@ -30,8 +32,10 @@ class Cancela(t.Thread):
             IO = random.randint(0,1)
             if IO == 1:
                 self.carroEntrar(1)
+                lock.acquire()
                 fila_pra_entrar -= 1
                 fila_pra_sair += 1
+                lock.release()
             if IO == 0:
                 self.carroSair(1)
                 fila_pra_sair -= 1
