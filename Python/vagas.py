@@ -1,6 +1,8 @@
 import threading
 import time
 
+vagas = [0]
+
 class Vaga:
     def __init__(self, quantidade):
         self.quantidade = quantidade
