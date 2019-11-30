@@ -1,5 +1,6 @@
 import threading
 import time
+import random
 
 vagas = [0]
 
@@ -39,8 +40,15 @@ class Vaga:
         return False
     
     def buscaVagaOcupada(self):
+        vagas_ocupadas = []
         for vaga in self.vagas:
             if vaga['vaga_disponivel']._value == 0:
-                return vaga['numero']
-            else:
-                return 0
+                 vagas_ocupadas.append({
+                     'numero': vaga['numero']
+                 })
+
+        if len(vagas_ocupadas)> 0:
+            array = random.randint(0,len(vagas_ocupadas))
+            return vagas_ocupadas[array-1]['numero']
+        else: return 0
+        
