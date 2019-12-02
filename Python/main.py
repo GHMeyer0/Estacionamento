@@ -11,8 +11,8 @@ def clear(): return os.system('cls')  # on Windows System
 fila_pra_entrar = 0
 fila_pra_sair = 0 
 quantidade_vagas = 0 
-lock = threading.Semaphore(1)
-estacionamento = vagas.Vaga(quantidade_vagas)
+estacionamento = vagas.Vaga(0)
+vagas_disponiveis = threading.Semaphore(quantidade_vagas)
 
 
 def setQuantCancelas(quantidade):
@@ -37,19 +37,21 @@ class Cancela(t.Thread):
         global fila_pra_entrar
         global fila_pra_sair 
 
-        lock.acquire()
+        vagas_disponiveis.acquire()
         estacionamento.ocupaVaga() 
         fila_pra_entrar -= 1
         fila_pra_sair += 1
-        lock.release() 
 
     def carroSair(self):
         global fila_pra_entrar
         global fila_pra_sair 
-        lock.acquire()
-        estacionamento.liberaVaga()
-        fila_pra_sair -= 1
-        lock.release()
+
+        if vagas_disponiveis._value <= quantidade_vagas:
+            estacionamento.liberaVaga()
+            vagas_disponiveis.release()
+            fila_pra_sair -= 1
+        else: print("Todas vagas liberadas")
+        
 
     def run(self):
         while fila_pra_entrar > 0:
@@ -77,8 +79,10 @@ class Application:
     
     def setQuantCancelasEntry(self):
         global estacionamento
+        global vagas_disponiveis
         self.setQuantVagasEntry()
         estacionamento = vagas.Vaga(quantidade_vagas)
+        vagas_disponiveis = threading.Semaphore(quantidade_vagas)
         self.setQuantCarrosEntry()
         quantCancelas = self.quantCancelas.get()
         setQuantCancelas(quantCancelas)
